@@ -84,7 +84,7 @@ const main = async () => {
         }
     }
     catch (err) {
-        console.error("Error", err);
+        console.error("Error", err.ReceiveMessageCommand);
     }
     finally {
         await postgresClient.end();
