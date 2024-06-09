@@ -1,0 +1,92 @@
+import { SQSClient, ReceiveMessageCommand, DeleteMessageCommand } from "@aws-sdk/client-sqs";
+import pkg from 'pg';
+import crypto from 'crypto';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const { Client } = pkg;
+
+// Configuration
+const QUEUE_URL = process.env.QUEUE_URL || "http://localhost:4566/000000000000/login-queue";
+const DB_NAME = process.env.DB_NAME || "postgres";
+const DB_USER = process.env.DB_USER || "postgres";
+const DB_PASSWORD = process.env.DB_PASSWORD || "postgres";
+const DB_HOST = process.env.DB_HOST || "localhost";
+const DB_PORT = process.env.DB_PORT || 5432;
+
+// SQS client
+const sqsClient = new SQSClient({ region: 'us-east-1', endpoint: 'http://localhost:4566' });
+
+// PostgreSQL client
+const pgClient = new Client({
+  user: DB_USER,
+  host: DB_HOST,
+  database: DB_NAME,
+  password: DB_PASSWORD,
+  port: DB_PORT,
+});
+
+await pgClient.connect();
+
+const maskPII = (value) => {
+  return crypto.createHash('sha256').update(value).digest('hex');
+};
+
+const processMessage = (message) => {
+  const data = JSON.parse(message.Body);
+
+  const user_id = data.user_id;
+  const device_type = data.device_type;
+  const masked_ip = maskPII(data.ip);
+  const masked_device_id = maskPII(data.device_id);
+  const locale = data.locale;
+  const app_version = parseInt(data.app_version.replace('.', ''), 10);
+  const create_date = new Date(data.create_date);
+
+  return [user_id, device_type, masked_ip, masked_device_id, locale, app_version, create_date];
+};
+
+const writeToDB = async (record) => {
+  const query = `
+    INSERT INTO user_logins (user_id, device_type, masked_ip, masked_device_id, locale, app_version, create_date)
+    VALUES ($1, $2, $3, $4, $5, $6, $7);
+  `;
+  await pgClient.query(query, record);
+};
+
+const main = async () => {
+  try {
+    const params = {
+      QueueUrl: QUEUE_URL,
+      AttributeNames: ['SentTimestamp'],
+      MaxNumberOfMessages: 10,
+      MessageAttributeNames: ['All'],
+      VisibilityTimeout: 20,
+      WaitTimeSeconds: 0,
+    };
+
+    const data = await sqsClient.send(new ReceiveMessageCommand(params));
+
+    if (data.Messages) {
+      for (const message of data.Messages) {
+        const record = processMessage(message);
+        await writeToDB(record);
+
+        const deleteParams = {
+          QueueUrl: QUEUE_URL,
+          ReceiptHandle: message.ReceiptHandle,
+        };
+
+        await sqsClient.send(new DeleteMessageCommand(deleteParams));
+        console.log("Message Deleted", message.MessageId);
+      }
+    }
+  } catch (err) {
+    console.error("Error", err);
+  } finally {
+    await pgClient.end();
+  }
+};
+
+main();
