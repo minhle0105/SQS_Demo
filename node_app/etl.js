@@ -20,39 +20,36 @@ const sqsClient = new SQSClient({
 });
 
 const postgresClient = new Client({
-  user: DB_USER,
-  host: DB_HOST,
-  database: DB_NAME,
-  password: DB_PASSWORD,
-  port: DB_PORT,
+    user: DB_USER,
+    host: DB_HOST,
+    database: DB_NAME,
+    password: DB_PASSWORD,
+    port: DB_PORT,
 });
 
 await postgresClient.connect();
 
 const maskPII = (value) => {
-  return crypto.createHash('sha256').update(value).digest('hex');
+    return crypto.createHash('sha256').update(value).digest('hex');
 };
 
 const processMessage = (message) => {
-  const data = JSON.parse(message.Body);
-
-  const user_id = data.user_id;
-  const device_type = data.device_type;
-  const masked_ip = maskPII(data.ip);
-  const masked_device_id = maskPII(data.device_id);
-  const locale = data.locale;
-  const app_version = parseInt(data.app_version.replace('.', ''), 10);
-  const create_date = new Date(data.create_date);
-
-  return [user_id, device_type, masked_ip, masked_device_id, locale, app_version, create_date];
+    const data = JSON.parse(message.Body);
+    return [data.user_id,
+            data.device_type,
+            maskPII(data.ip),
+            maskPII(data.device_id),
+            data.locale,
+            parseInt(data.app_version.replace('.', ''), 10),
+            new Date(data.create_date)];
 };
 
 const writeToDB = async (record) => {
-  const query = `
-    INSERT INTO user_logins (user_id, device_type, masked_ip, masked_device_id, locale, app_version, create_date)
-    VALUES ($1, $2, $3, $4, $5, $6, $7);
-  `;
-  await postgresClient.query(query, record);
+    const query = `
+        INSERT INTO user_logins (user_id, device_type, masked_ip, masked_device_id, locale, app_version, create_date)
+        VALUES ($1, $2, $3, $4, $5, $6, $7);
+    `;
+    await postgresClient.query(query, record);
 };
 
 const main = async () => {
