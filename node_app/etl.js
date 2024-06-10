@@ -67,16 +67,16 @@ const main = async () => {
 
         if (data.Messages) {
             for (const message of data.Messages) {
-            const record = processMessage(message);
-            await writeToDB(record);
+                const record = processMessage(message);
+                await writeToDB(record);
 
-            const deleteParams = {
-                QueueUrl: QUEUE_URL,
-                ReceiptHandle: message.ReceiptHandle,
-            };
+                const deleteParams = {
+                    QueueUrl: QUEUE_URL,
+                    ReceiptHandle: message.ReceiptHandle,
+                };
 
-            await sqsClient.send(new DeleteMessageCommand(deleteParams));
-            console.log("Message Deleted", message.MessageId);
+                await sqsClient.send(new DeleteMessageCommand(deleteParams));
+                console.log("Message Deleted", message.MessageId);
             }
         }
     }
