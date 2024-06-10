@@ -3,7 +3,7 @@
 ## How to run the applications:
 
 1. Prerequisites:
-- Node.js (see installation guide [here] [https://nodejs.org/en/learn/getting-started/how-to-install-nodejs])
+- Node.js (see installation guide [here](https://nodejs.org/en/learn/getting-started/how-to-install-nodejs))
 - Docker
 - Docker Compose
 - AWS CLI
