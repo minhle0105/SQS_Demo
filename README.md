@@ -3,7 +3,7 @@
 ## How to run the applications:
 
 1. Prerequisites:
-- Node.js
+- Node.js (see installation guide here [https://nodejs.org/en/learn/getting-started/how-to-install-nodejs])
 - Docker
 - Docker Compose
 - AWS CLI
@@ -36,6 +36,7 @@ DB_PASSWORD=YOUR_DB_PASSWORD
 DB_HOST=YOUR_DB_HOST
 DB_PORT=YOUR_DB_PORT
 ```
+
 - Enable PostgreSQL on your machine and create the necessary table with the following query (make sure it's created in the correct database name ('postgres' by default)):
 ```sql
 CREATE TABLE IF NOT EXISTS user_logins(
@@ -47,6 +48,11 @@ locale varchar(32),
 app_version integer,
 create_date date
 );
+```
+
+- Run the application:
+```bash
+node etl.js
 ```
 Responses to questions:
 
