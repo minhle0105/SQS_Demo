@@ -64,7 +64,8 @@ Up until here, everything is as-required, step by step. However, I realized mult
 Regarding the steps of masking PII, I was not quite sure of the security requirements, so I decided to go for the SHA-256 encryption algorithm.
 
 4. Responses to questions:
-- How would you deploy this application in production?
+- *How would you deploy this application in production?
+    -
 - What other components would you want to add to make this production ready?
 - How can this application scale with a growing dataset.
 - How can PII be recovered later on?
