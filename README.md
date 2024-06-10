@@ -12,7 +12,7 @@
 2. Steps to run
 - Clone the repository:
 ```bash
-git clone https://github.com/minhle0105/SQS_Demo/tree/main
+git clone https://github.com/minhle0105/SQS_Demo.git
 cd SQS_Demo
 ```
 
