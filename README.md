@@ -55,7 +55,7 @@ create_date date
 node etl.js
 ```
 3. Thought process:
-
+Below is my thought process that builds up my approach. After setting up all the dependencies and requirements, I started by having a `main` function.
 
 4. Responses to questions:
 - How would you deploy this application in production?
