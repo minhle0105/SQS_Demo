@@ -64,9 +64,13 @@ Up until here, everything is as-required, step by step. However, I realized mult
 Regarding the steps of masking PII, I was not quite sure of the security requirements, so I decided to go for the SHA-256 encryption algorithm.
 
 4. Responses to questions:
-- *How would you deploy this application in production?
-    -
-- What other components would you want to add to make this production ready?
-- How can this application scale with a growing dataset.
-- How can PII be recovered later on?
-- What are the assumptions you made?
+- *How would you deploy this application in production?*
+    - There would be 5 main steps needed to deploy this application. Given that the context of this application is mainly related to AWS, I will align my response to AWS as much as I can.
+    - The first step is to use Docker to containerize the application, and Kuburnetes for container orchestration to achieve reliable deployment.
+    - Next step is to deploy the application on AWS. Here, I would choose to deploy it on an (or multiple, depends on specific contexts) EC2 instance(s).
+    - Next step is to setup automated testing, building, and deployment infrastrucuture (CI/CD). This depends on the specific requirements, which are not mentioned in this project.
+    - Last step would be database configuration. I believe AWS RDS has an engione option which works with PostgreSQL, which will be suitable for this application.
+- *What other components would you want to add to make this production ready?*
+- *How can this application scale with a growing dataset?*
+- *How can PII be recovered later on?*
+- *What are the assumptions you made?*
