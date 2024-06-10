@@ -4,10 +4,10 @@
 
 1. Prerequisites:
 - Node.js (see installation guide [here](https://nodejs.org/en/learn/getting-started/how-to-install-nodejs))
-- Docker
-- Docker Compose
-- AWS CLI
-- PostgreSQL
+- Docker (see installation guide [here](https://docs.docker.com/get-docker/))
+- Docker Compose (see installation guide [here](https://docs.docker.com/compose/install/))
+- AWS CLI (see installation guide [here](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html))
+- PostgreSQL (see installation guide [here](https://www.postgresql.org/docs/current/tutorial-install.html))
 
 2. Steps
 - Clone the repository:
