@@ -9,7 +9,7 @@
 - AWS CLI (see installation guide [here](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html))
 - PostgreSQL (see installation guide [here](https://www.postgresql.org/docs/current/tutorial-install.html))
 
-2. Steps
+2. Steps to run
 - Clone the repository:
 ```bash
 git clone https://github.com/minhle0105/SQS_Demo/tree/main
@@ -54,8 +54,10 @@ create_date date
 ```bash
 node etl.js
 ```
-Responses to questions:
+3. Thought process:
 
+
+4. Responses to questions:
 - How would you deploy this application in production?
 - What other components would you want to add to make this production ready?
 - How can this application scale with a growing dataset.
